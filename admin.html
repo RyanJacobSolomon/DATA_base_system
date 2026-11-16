@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jules Cafe - Staff & Admin Management Portal</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <!-- TOP HEADER BAR -->
+  <header class="admin-header">
+    <div class="header-left">
+      <img src="584927562_696803330152901_2932946184318253535_n.jpg" alt="Jules Cafe Logo" class="brand-logo">
+      <div class="brand-title">
+        <h1>Jules <span>Cafe</span></h1>
+        <p class="brand-sub">Management & POS Portal • Davao City</p>
+      </div>
+    </div>
+
+    <div class="header-right" id="header-user-info" style="display: none;">
+      <div class="user-badge">
+        <i class="fa-solid fa-user-gear"></i>
+        <div class="user-details">
+          <span class="user-name" id="user-display-name">Admin User</span>
+          <span class="user-role-pill" id="user-display-role">ADMIN</span>
+        </div>
+      </div>
+      <button class="btn-staff-chat-header" id="btn-open-staff-chat" onclick="openStaffChatModal()" title="Live Customer Support Chat"><i class="fa-solid fa-comments"></i> Customer Chat <span class="badge-count" id="staff-chat-unread-count" style="display:none;">0</span></button>
+      <button class="btn-kds-header" id="btn-open-kds-header" onclick="openKdsModal()" title="Open Full-Screen Kitchen Display System"><i class="fa-solid fa-tv"></i> Kitchen KDS</button>
+      <a href="index.html" class="btn-icon" title="View Customer Website"><i class="fa-solid fa-store"></i> Customer Website</a>
+      <button class="btn-logout" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="portal-container">
+
+    <!-- LOGIN SCREEN -->
+    <section id="login-section" class="login-wrapper">
+      <!-- STAFF LOGIN CARD -->
+      <div class="login-card" id="staff-login-card">
+        <div class="login-badge-icon">
+          <img src="584927562_696803330152901_2932946184318253535_n.jpg" alt="Jules Cafe Logo" class="login-logo-img">
+        </div>
+        <h2>Portal Login</h2>
+        <p class="login-sub">Sign in to access Orders, Menu Management, and Staff Access.</p>
+
+        <!-- DEMO QUICK LOGIN BUTTONS -->
+        <div class="quick-login-box">
+          <p class="quick-login-title"><i class="fa-solid fa-bolt"></i> Quick Demo Logins:</p>
+          <div class="quick-login-buttons">
+            <button type="button" class="btn-quick quick-admin" data-user="admin" data-pass="admin123">
+              <i class="fa-solid fa-crown"></i> Admin
+            </button>
+            <button type="button" class="btn-quick quick-staff" data-user="staff" data-pass="staff123">
+              <i class="fa-solid fa-mug-saucer"></i> Staff
+            </button>
+            <button type="button" class="btn-quick quick-employee" data-user="employee" data-pass="employee123">
+              <i class="fa-solid fa-id-badge"></i> Employee
+            </button>
+          </div>
+        </div>
+
+        <form id="login-form" class="login-form">
+          <div class="form-group">
+            <label for="login-username"><i class="fa-solid fa-user"></i> Username</label>
+            <input type="text" id="login-username" placeholder="e.g. admin, staff, employee" required>
+          </div>
+
+          <div class="form-group">
+            <label for="login-password"><i class="fa-solid fa-key"></i> Password</label>
+            <input type="password" id="login-password" placeholder="Enter password" required>
+          </div>
+
+          <div id="login-error" class="error-banner" style="display: none;"></div>
+
+          <button type="submit" class="btn-login-submit">
+            <span>Sign In</span> <i class="fa-solid fa-arrow-right"></i>
+          </button>
+
+          <div class="login-footer-hint" style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08); text-align: center; font-size: 0.85rem; color: var(--text-muted);">
+            <span>Ordering coffee online?</span>
+            <a href="orderonline.html" style="color: var(--primary-gold); margin-left: 6px; font-weight: 600; text-decoration: none;">
+              <i class="fa-solid fa-bag-shopping"></i> Customer Store & Register &rarr;
+            </a>
+          </div>
+        </form>
+      </div>
+
+      <!-- CUSTOMER ACCESS RESTRICTED CARD -->
+      <div class="login-card blocked-card" id="customer-blocked-card" style="display: none;">
+        <div class="blocked-badge-icon">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h2 style="color: #ff6b6b; margin-top: 0.5rem; font-size: 1.6rem;">Access Restricted</h2>
+        
+        <div class="user-identity-chip">
+          <i class="fa-solid fa-circle-user" style="color: #3a86ff; font-size: 1.1rem;"></i>
+          <span>Signed in as <strong id="blocked-user-name" style="color: #fff;">Customer</strong></span>
+          <span class="role-chip-customer">CUSTOMER</span>
+        </div>
+
+        <p class="login-sub" style="margin-top: 0.75rem; color: #d0c2b2; line-height: 1.55; font-size: 0.9rem;">
+          The Staff & Admin Management Portal is strictly reserved for <strong>Jules Cafe kitchen staff, baristas, and administrators</strong>. Customer accounts cannot access internal order queues, live kitchen displays, or sales reports.
+        </p>
+
+        <div class="blocked-action-buttons">
+          <a href="orderonline.html" class="btn-login-submit" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <i class="fa-solid fa-bag-shopping"></i> <span>Return to Customer Store</span>
+          </a>
+          <button type="button" class="btn-switch-account" id="btn-customer-switch-account" onclick="handleLogout()">
+            <i class="fa-solid fa-right-from-bracket"></i> Sign Out & Switch to Staff Account
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTHENTICATED PORTAL DASHBOARD -->
+    <section id="portal-dashboard" class="dashboard-wrapper" style="display: none;">
+
+      <!-- NAVIGATION TABS -->
+      <nav class="portal-tabs">
+        <button class="tab-btn active" data-tab="tab-overview" id="tab-nav-overview">
+          <i class="fa-solid fa-chart-pie"></i> Dashboard & Analytics
+        </button>
+        <button class="tab-btn" data-tab="tab-orders" id="tab-nav-orders">
+          <i class="fa-solid fa-receipt"></i> Orders Management <span class="badge-count" id="pending-orders-count">0</span>
+        </button>
+        <button class="tab-btn" data-tab="tab-menu" id="tab-nav-menu">
+          <i class="fa-solid fa-mug-saucer"></i> Menu Items Directory
+        </button>
+        <button class="tab-btn" data-tab="tab-users" id="tab-nav-users" style="display: none;">
+          <i class="fa-solid fa-users-gear"></i> User Accounts (Admin)
+        </button>
+      </nav>
+
+      <!-- TAB 1: OVERVIEW & ADVANCED ANALYTICS DASHBOARD -->
+      <div id="tab-overview" class="tab-content active">
+
+        <!-- WELCOME & LIVE STATUS BANNER -->
+        <div class="dash-welcome-banner">
+          <div class="dash-welcome-left">
+            <h2>☕ Welcome back, <span id="dash-greeting-name">Admin</span>!</h2>
+            <p>Jules Cafe Live Management Hub • PRK-2, Communal Road, Davao City</p>
+          </div>
+          <div class="dash-welcome-right">
+            <div class="live-status-pill">
+              <span class="status-pulse-dot"></span>
+              <span>Kitchen Online & Active</span>
+            </div>
+            <div class="dash-clock" id="live-clock">Loading time...</div>
+          </div>
+        </div>
+
+        <!-- QUICK ACTION BAR -->
+        <div class="quick-action-bar">
+          <button class="btn-dash-action gold" id="btn-quick-walkin">
+            <i class="fa-solid fa-cash-register"></i> + Fast Walk-In Order
+          </button>
+          <button class="btn-dash-action" onclick="switchTab('tab-orders')">
+            <i class="fa-solid fa-fire"></i> View Kitchen Queue (<span id="dash-queue-badge">0</span>)
+          </button>
+          <button class="btn-dash-action" id="btn-quick-add-menu">
+            <i class="fa-solid fa-plus"></i> + Add Menu Item
+          </button>
+          <button class="btn-dash-action green" id="btn-export-csv-overview">
+            <i class="fa-solid fa-file-excel"></i> Export Sales CSV
+          </button>
+          <button class="btn-dash-action outline" id="btn-dash-refresh">
+            <i class="fa-solid fa-rotate-right"></i> Refresh Live Data
+          </button>
+        </div>
+
+        <!-- 6 KPI METRICS GRID -->
+        <div class="metrics-grid">
+          <div class="metric-card gold">
+            <div class="metric-icon"><i class="fa-solid fa-peseta-sign"></i></div>
+            <div class="metric-data">
+              <span class="metric-label">Total Revenue</span>
+              <h3 id="stat-sales">₱0.00</h3>
+              <small class="metric-sub">Avg Ticket: <strong id="stat-avg-ticket">₱0.00</strong></small>
+            </div>
+          </div>
+
+          <div class="metric-card brown">
+            <div class="metric-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+            <div class="metric-data">
+              <span class="metric-label">Total Orders</span>
+              <h3 id="stat-total-orders">0</h3>
+              <small class="metric-sub"><strong id="stat-completed-orders">0</strong> Completed</small>
+            </div>
+          </div>
+
+          <div class="metric-card orange">
+            <div class="metric-icon"><i class="fa-solid fa-fire-burner"></i></div>
+            <div class="metric-data">
+              <span class="metric-label">Kitchen Queue</span>
+              <h3 id="stat-pending">0</h3>
+              <small class="metric-sub">Pending / Preparing</small>
+            </div>
+          </div>
+
+          <div class="metric-card green">
+            <div class="metric-icon"><i class="fa-solid fa-mug-hot"></i></div>
+            <div class="metric-data">
+              <span class="metric-label">Menu Items</span>
+              <h3 id="stat-menu-count">0</h3>
+              <small class="metric-sub">4 Drink & Food Categories</small>
+            </div>
+          </div>
+
+          <div class="metric-card blue">
+            <div class="metric-icon"><i class="fa-solid fa-motorcycle"></i></div>
+            <div class="metric-data">
+              <span class="metric-label">Fulfillment</span>
+              <h3 id="stat-fulfillment-ratio">0%</h3>
+              <small class="metric-sub"><span id="stat-pickup-count">0</span> Pickup | <span id="stat-delivery-count">0</span> Delivery</small>
+            </div>
+          </div>
+
+          <div class="metric-card purple" id="metric-card-staff">
+            <div class="metric-icon"><i class="fa-solid fa-user-shield"></i></div>
+            <div class="metric-data">
+              <span class="metric-label">Staff Accounts</span>
+              <h3 id="stat-users-count">0</h3>
+              <small class="metric-sub">Admin & Baristas</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7-DAY REVENUE VISUAL CHART -->
+        <div class="panel sales-chart-panel" style="margin-bottom: 1.5rem;">
+          <div class="panel-header">
+            <h2><i class="fa-solid fa-chart-line text-gold"></i> 7-Day Revenue & Sales Trend</h2>
+            <span class="badge-tag">Visual Analytics</span>
+          </div>
+          <div class="visual-chart-container" id="visual-sales-chart">
+            <p class="empty-state">Loading sales analytics chart...</p>
+          </div>
+        </div>
+
+        <!-- 2-COLUMN ANALYTICS & INSIGHTS GRID -->
+        <div class="dashboard-analytics-grid">
+          
+          <!-- LEFT COLUMN: CATEGORY SALES & HOURLY RUSH -->
+          <div class="analytics-col">
+            
+            <!-- Category Sales Breakdown -->
+            <div class="panel">
+              <div class="panel-header">
+                <h2><i class="fa-solid fa-chart-simple"></i> Menu Category Popularity</h2>
+                <span class="badge-tag">Live Breakdown</span>
+              </div>
+              <div class="category-breakdown-container">
+                
+                <div class="category-stat-row">
+                  <div class="cat-stat-info">
+                    <span><i class="fa-solid fa-mug-hot text-gold"></i> Espresso-Based</span>
+                    <strong id="cat-stat-espresso-pct">45%</strong>
+                  </div>
+                  <div class="progress-bar-track">
+                    <div class="progress-bar-fill gold" id="cat-bar-espresso" style="width: 45%;"></div>
+                  </div>
+                </div>
+
+                <div class="category-stat-row">
+                  <div class="cat-stat-info">
+                    <span><i class="fa-solid fa-glass-water text-blue"></i> Milk-Based & Cheesecakes</span>
+                    <strong id="cat-stat-milk-pct">25%</strong>
+                  </div>
+                  <div class="progress-bar-track">
+                    <div class="progress-bar-fill blue" id="cat-bar-milk" style="width: 25%;"></div>
+                  </div>
+                </div>
+
+                <div class="category-stat-row">
+                  <div class="cat-stat-info">
+                    <span><i class="fa-solid fa-ice-cream text-purple"></i> Blended Frappes</span>
+                    <strong id="cat-stat-frappe-pct">18%</strong>
+                  </div>
+                  <div class="progress-bar-track">
+                    <div class="progress-bar-fill purple" id="cat-bar-frappe" style="width: 18%;"></div>
+                  </div>
+                </div>
+
+                <div class="category-stat-row">
+                  <div class="cat-stat-info">
+                    <span><i class="fa-solid fa-utensils text-green"></i> Quick Bites & Pastas</span>
+                    <strong id="cat-stat-bites-pct">12%</strong>
+                  </div>
+                  <div class="progress-bar-track">
+                    <div class="progress-bar-fill green" id="cat-bar-bites" style="width: 12%;"></div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Peak Coffee Rush Hours -->
+            <div class="panel">
+              <div class="panel-header">
+                <h2><i class="fa-solid fa-clock"></i> Davao Cafe Rush Hours</h2>
+                <span class="badge-tag">Daily Traffic</span>
+              </div>
+              <div class="rush-hours-grid">
+                <div class="rush-hour-card high">
+                  <div class="rush-time">7:00 AM - 10:00 AM</div>
+                  <div class="rush-label"><i class="fa-solid fa-bolt"></i> Morning Commute Rush</div>
+                  <div class="rush-meter"><span style="width: 90%;"></span></div>
+                </div>
+                <div class="rush-hour-card medium">
+                  <div class="rush-time">12:00 PM - 2:00 PM</div>
+                  <div class="rush-label"><i class="fa-solid fa-utensils"></i> Lunch & Iced Coffee</div>
+                  <div class="rush-meter"><span style="width: 75%;"></span></div>
+                </div>
+                <div class="rush-hour-card high">
+                  <div class="rush-time">3:00 PM - 5:30 PM</div>
+                  <div class="rush-label"><i class="fa-solid fa-coffee"></i> Merienda & Frappes</div>
+                  <div class="rush-meter"><span style="width: 85%;"></span></div>
+                </div>
+                <div class="rush-hour-card low">
+                  <div class="rush-time">6:00 PM - 8:30 PM</div>
+                  <div class="rush-label"><i class="fa-solid fa-moon"></i> Evening Hangout / Decaf</div>
+                  <div class="rush-meter"><span style="width: 50%;"></span></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COLUMN: BESTSELLERS LEADERBOARD & LIVE QUEUE -->
+          <div class="analytics-col">
+
+            <!-- Top 5 Bestsellers Leaderboard -->
+            <div class="panel">
+              <div class="panel-header">
+                <h2><i class="fa-solid fa-trophy text-gold"></i> Top Selling Items</h2>
+                <span class="badge-tag">Leaderboard</span>
+              </div>
+              <div class="bestsellers-list" id="bestsellers-container">
+                <p class="empty-state">Loading bestseller items...</p>
+              </div>
+            </div>
+
+            <!-- Live Kitchen & Incoming Orders Snapshot -->
+            <div class="panel">
+              <div class="panel-header">
+                <h2><i class="fa-solid fa-fire text-amber"></i> Live Active Orders Queue</h2>
+                <button class="btn-sm outline" onclick="switchTab('tab-orders')">Full Orders Screen</button>
+              </div>
+              <div class="orders-preview-grid" id="recent-orders-preview">
+                <p class="empty-state">Loading kitchen queue...</p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- TAB 2: ORDERS MANAGEMENT -->
+      <div id="tab-orders" class="tab-content">
+        <div class="panel">
+          <div class="panel-header flex-wrap">
+            <div>
+              <h2><i class="fa-solid fa-boxes-stacked"></i> Orders & Kitchen Status Center</h2>
+              <p class="panel-sub">Manage customer orders, update prep progress, and print official POS receipts.</p>
+            </div>
+            <div class="filter-controls">
+              <div class="search-box">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" id="orders-search-input" placeholder="Search customer or order ID...">
+              </div>
+              <div class="status-pills-filter">
+                <button class="filter-pill active" data-status="all">All Orders</button>
+                <button class="filter-pill" data-status="Pending">Pending</button>
+                <button class="filter-pill" data-status="Preparing">Preparing</button>
+                <button class="filter-pill" data-status="Ready">Ready</button>
+                <button class="filter-pill" data-status="Completed">Completed</button>
+                <button class="filter-pill" data-status="Cancelled">Cancelled</button>
+              </div>
+              <button class="btn-primary btn-sm" id="btn-orders-walkin"><i class="fa-solid fa-plus"></i> Walk-In Order</button>
+              <button class="btn-sm green" id="btn-export-csv-orders"><i class="fa-solid fa-file-excel"></i> Export CSV</button>
+              <button class="btn-sm outline" id="refresh-orders-btn"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+            </div>
+          </div>
+
+          <div class="orders-list-grid" id="orders-container">
+            <p class="empty-state">Loading orders database...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: MENU ITEMS CRUD -->
+      <div id="tab-menu" class="tab-content">
+        <div class="panel">
+          <div class="panel-header flex-wrap">
+            <div>
+              <h2><i class="fa-solid fa-mug-saucer"></i> Menu Items Directory</h2>
+              <p class="panel-sub">Add, customize pricing, edit sizes and syrup options in the Jules Cafe menu.</p>
+            </div>
+            <div class="action-toolbar">
+              <div class="search-box">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" id="menu-search-input" placeholder="Search menu name or category...">
+              </div>
+              <select id="menu-category-filter" class="select-filter">
+                <option value="all">All Categories</option>
+                <option value="espresso">Espresso-Based</option>
+                <option value="milk">Milk-Based</option>
+                <option value="frappe">Frappe</option>
+                <option value="quickbites">Quick Bites</option>
+              </select>
+              <button class="btn-primary" id="open-add-menu-modal-btn">
+                <i class="fa-solid fa-plus"></i> Add New Menu Item
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table" id="menu-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Category</th>
+                  <th>Item Name</th>
+                  <th>Base Price</th>
+                  <th>8oz / 12oz / 16oz</th>
+                  <th>Options</th>
+                  <th>Stock Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="menu-table-body">
+                <tr><td colspan="7" class="text-center">Loading menu catalog...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: USER ACCOUNTS CRUD (ADMIN ONLY - TOTALLY SEPARATE TAB) -->
+      <div id="tab-users" class="tab-content">
+        <div class="panel">
+          <div class="panel-header flex-wrap">
+            <div>
+              <h2><i class="fa-solid fa-user-shield"></i> User Accounts & Roles (Admin Only)</h2>
+              <p class="panel-sub">Manage barista, staff, and manager login accounts and system permissions.</p>
+            </div>
+            <button class="btn-primary" id="open-add-user-modal-btn">
+              <i class="fa-solid fa-user-plus"></i> Create New User
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table" id="users-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Username</th>
+                  <th>Full Name</th>
+                  <th>Contact Info</th>
+                  <th>Role</th>
+                  <th>Created At</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-body">
+                <tr><td colspan="7" class="text-center">Loading accounts...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- MODAL: ADD / EDIT MENU ITEM -->
+  <div id="menu-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="menu-modal-title"><i class="fa-solid fa-utensils"></i> Add Menu Item</h3>
+        <button class="modal-close" id="close-menu-modal-btn">&times;</button>
+      </div>
+      <form id="menu-form" class="modal-form">
+        <input type="hidden" id="menu-edit-mode" value="create">
+        
+        <div class="form-row">
+          <div class="form-group half">
+            <label for="menu-id">Item ID <small>(e.g. esp-13, bites-5)</small></label>
+            <input type="text" id="menu-id" placeholder="Auto-generated if empty">
+          </div>
+          <div class="form-group half">
+            <label for="menu-category">Category *</label>
+            <select id="menu-category" required>
+              <option value="espresso">Espresso-Based</option>
+              <option value="milk">Milk-Based</option>
+              <option value="frappe">Frappe</option>
+              <option value="quickbites">Quick Bites</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="menu-name">Item Name *</label>
+          <input type="text" id="menu-name" placeholder="e.g. Vanilla Cold Brew" required>
+        </div>
+
+        <div class="form-group">
+          <label for="menu-desc">Description</label>
+          <textarea id="menu-desc" rows="2" placeholder="Brief appetizing description..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group quarter">
+            <label for="menu-base-price">Base Price (₱) *</label>
+            <input type="number" step="0.01" id="menu-base-price" placeholder="125" required>
+          </div>
+          <div class="form-group quarter">
+            <label for="menu-price-8oz">8oz Price (₱)</label>
+            <input type="number" step="0.01" id="menu-price-8oz" placeholder="125">
+          </div>
+          <div class="form-group quarter">
+            <label for="menu-price-12oz">12oz Price (₱)</label>
+            <input type="number" step="0.01" id="menu-price-12oz" placeholder="145">
+          </div>
+          <div class="form-group quarter">
+            <label for="menu-price-16oz">16oz Price (₱)</label>
+            <input type="number" step="0.01" id="menu-price-16oz" placeholder="165">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Customization Options Available:</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" id="menu-has-sizes" checked> Sizing Options (8oz/12oz/16oz)</label>
+            <label><input type="checkbox" id="menu-has-milk"> Milk Choices</label>
+            <label><input type="checkbox" id="menu-has-syrups"> Syrup Add-ons</label>
+            <label><input type="checkbox" id="menu-has-extra-shot"> Extra Shot Option</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="menu-pairing">Pairing Recommendation</label>
+          <input type="text" id="menu-pairing" placeholder="e.g. Pairs wonderfully with Creamy Carbonara!">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="cancel-menu-modal-btn">Cancel</button>
+          <button type="submit" class="btn-primary"><i class="fa-solid fa-save"></i> Save Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT USER -->
+  <div id="user-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="user-modal-title"><i class="fa-solid fa-user-gear"></i> Create New User Account</h3>
+        <button class="modal-close" id="close-user-modal-btn">&times;</button>
+      </div>
+      <form id="user-form" class="modal-form">
+        <input type="hidden" id="user-edit-mode" value="create">
+        <input type="hidden" id="user-edit-id" value="">
+
+        <div class="form-group">
+          <label for="user-username">Username *</label>
+          <input type="text" id="user-username" placeholder="e.g. barista_john" required>
+        </div>
+
+        <div class="form-group">
+          <label for="user-fullname">Full Name *</label>
+          <input type="text" id="user-fullname" placeholder="e.g. John Doe" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group half">
+            <label for="user-email">Email Address</label>
+            <input type="email" id="user-email" placeholder="e.g. maria@example.com">
+          </div>
+          <div class="form-group half">
+            <label for="user-phone">Phone Number</label>
+            <input type="tel" id="user-phone" placeholder="e.g. 09123456789">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="user-address">Delivery Address (Optional)</label>
+          <input type="text" id="user-address" placeholder="e.g. Door 3, Communal Road, Davao City">
+        </div>
+
+        <div class="form-group">
+          <label for="user-role">Role *</label>
+          <select id="user-role" required>
+            <option value="customer">Customer (Store Account)</option>
+            <option value="employee">Employee (Orders Status & POS Only)</option>
+            <option value="staff">Staff (Menu Items & Orders Management)</option>
+            <option value="admin">Admin (Full System & User Management)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="user-password">Password <span id="password-req-note">*</span></label>
+          <input type="password" id="user-password" placeholder="Enter secure password">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="cancel-user-modal-btn">Cancel</button>
+          <button type="submit" class="btn-primary"><i class="fa-solid fa-user-check"></i> Save User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: FAST WALK-IN COUNTER ORDER (ADMIN / POS) -->
+  <div id="walkin-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-cash-register"></i> Fast Walk-In / Counter POS Order</h3>
+        <button class="modal-close" id="close-walkin-modal-btn">&times;</button>
+      </div>
+      <form id="walkin-form" class="modal-form">
+        <div class="form-group">
+          <label for="walkin-cust-name">Customer Name *</label>
+          <input type="text" id="walkin-cust-name" placeholder="e.g., Table 4 / Sarah" required>
+        </div>
+
+        <div class="form-group">
+          <label for="walkin-item-select">Select Menu Item *</label>
+          <select id="walkin-item-select" required>
+            <option value="">Select a menu item...</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group half">
+            <label for="walkin-qty">Quantity</label>
+            <input type="number" id="walkin-qty" min="1" max="50" value="1" required>
+          </div>
+          <div class="form-group half">
+            <label for="walkin-notes">Custom Notes / Options</label>
+            <input type="text" id="walkin-notes" placeholder="e.g. 12oz, Oat Milk, Less Sweet">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group half">
+            <label for="walkin-payment-method"><i class="fa-solid fa-wallet"></i> Payment Method</label>
+            <select id="walkin-payment-method">
+              <option value="Cash">Cash at Counter</option>
+              <option value="GCash">GCash Express</option>
+            </select>
+          </div>
+          <div class="form-group half" id="walkin-ref-wrap" style="display: none;">
+            <label for="walkin-payment-ref"><i class="fa-solid fa-receipt"></i> GCash Ref No.</label>
+            <input type="text" id="walkin-payment-ref" placeholder="13-digit Ref No.">
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="cancel-walkin-modal-btn">Cancel</button>
+          <button type="submit" class="btn-primary"><i class="fa-solid fa-plus"></i> Submit Kitchen Order</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: PRINTABLE THERMAL POS RECEIPT -->
+  <div id="receipt-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-box receipt-box">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-print"></i> Jules Cafe POS Receipt</h3>
+        <button class="modal-close" id="close-receipt-modal-btn">&times;</button>
+      </div>
+      
+      <!-- RECEIPT PAPER VIEW -->
+      <div class="receipt-paper" id="receipt-paper-content">
+        <div class="receipt-header">
+          <img src="584927562_696803330152901_2932946184318253535_n.jpg" alt="Jules Cafe Logo" class="receipt-logo">
+          <h4>JULES CAFE</h4>
+          <p>PRK-2, Communal Road, Davao City</p>
+          <p>Tel: +63 912 345 6789</p>
+          <div class="receipt-divider">================================</div>
+        </div>
+
+        <div class="receipt-meta">
+          <div><span>Order #:</span> <strong id="rec-order-id">#0000</strong></div>
+          <div><span>Date:</span> <span id="rec-date">2026-09-12 11:30 AM</span></div>
+          <div><span>Customer:</span> <strong id="rec-cust">Guest</strong></div>
+          <div><span>Type:</span> <span id="rec-type">PICKUP</span></div>
+          <div><span>Payment:</span> <strong id="rec-payment">CASH</strong></div>
+        </div>
+
+        <div class="receipt-divider">--------------------------------</div>
+
+        <div class="receipt-items" id="rec-items-list">
+          <!-- Item rows inserted here dynamically -->
+        </div>
+
+        <div class="receipt-divider">--------------------------------</div>
+
+        <div class="receipt-totals">
+          <div class="rec-row"><span>Subtotal:</span> <strong id="rec-subtotal">₱0.00</strong></div>
+          <div class="rec-row"><span>12% VAT:</span> <strong id="rec-tax">₱0.00</strong></div>
+          <div class="rec-row grand-total"><span>TOTAL:</span> <strong id="rec-total">₱0.00</strong></div>
+        </div>
+
+        <div class="receipt-divider">================================</div>
+        <div class="receipt-footer">
+          <p>Thank you for supporting Jules Cafe!</p>
+          <p>Slow mornings, strong coffee. ☕</p>
+          <p class="receipt-barcode">||| |||||| | |||||||| |||| |||</p>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="cancel-receipt-modal-btn">Close</button>
+        <button type="button" class="btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print Official Receipt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: VIEW ATTACHED GCASH RECEIPT SCREENSHOT -->
+  <div id="receipt-img-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-box" style="max-width: 440px; text-align: center;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-image"></i> Customer GCash Receipt</h3>
+        <button class="modal-close" onclick="closeReceiptImgModal()">&times;</button>
+      </div>
+      <div style="padding: 1rem;">
+        <img id="receipt-full-img" src="" alt="GCash Receipt" style="max-width: 100%; max-height: 480px; border-radius: 8px; border: 1px solid var(--border-color); object-fit: contain;">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" onclick="closeReceiptImgModal()">Close</button>
+      </div>
+    </div>
+  </div>
+  <!-- FULL-SCREEN KITCHEN DISPLAY SYSTEM (KDS) MODAL -->
+  <div id="kds-modal" class="kds-overlay" style="display: none;">
+    <div class="kds-header">
+      <div class="kds-brand-title">
+        <i class="fa-solid fa-fire text-amber"></i> <span>JULES CAFE</span> KITCHEN DISPLAY (KDS)
+        <span class="kds-pulse-tag"><i class="fa-solid fa-circle"></i> LIVE KITCHEN QUEUE</span>
+      </div>
+      <div class="kds-header-right">
+        <span id="kds-clock" class="kds-clock-text">00:00:00 AM</span>
+        <button type="button" class="btn-kds-exit" onclick="closeKdsModal()"><i class="fa-solid fa-xmark"></i> Exit KDS</button>
+      </div>
+    </div>
+
+    <div class="kds-content">
+      <div class="kds-grid" id="kds-tickets-grid">
+        <p class="empty-state">Loading kitchen queue...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: STAFF LIVE CUSTOMER SUPPORT CHAT -->
+  <div id="staff-chat-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-box staff-chat-modal-box">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <i class="fa-solid fa-comments text-gold" style="font-size:1.3rem;"></i>
+          <div>
+            <h3 style="margin:0; font-size:1.15rem;">Live Customer Support Desk</h3>
+            <span style="font-size:0.75rem; color:var(--text-muted);">Real-time kitchen & counter communication</span>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeStaffChatModal()">&times;</button>
+      </div>
+
+      <div class="staff-chat-body">
+        <div class="staff-chat-sidebar">
+          <div class="staff-chat-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="staff-chat-search-input" placeholder="Search conversations..." autocomplete="off">
+          </div>
+          <div class="staff-chat-sessions-container" id="staff-chat-sessions-list">
+            <p class="empty-state">Loading customer conversations...</p>
+          </div>
+        </div>
+
+        <div class="staff-chat-main">
+          <div class="staff-chat-active-header" id="staff-chat-active-title">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <i class="fa-solid fa-comments text-gold"></i>
+              <span>Select a conversation from the left to start chatting</span>
+            </div>
+            <div id="staff-chat-active-actions" style="display:none;">
+              <button type="button" class="btn-staff-delete-chat" id="btn-staff-delete-conv" title="Delete / Archive Conversation">
+                <i class="fa-solid fa-trash-can"></i> Delete
+              </button>
+            </div>
+          </div>
+
+          <div class="staff-chat-messages" id="staff-chat-messages-box">
+            <p class="empty-state">No chat session selected</p>
+          </div>
+
+          <!-- Staff Quick Canned Responses -->
+          <div class="staff-quick-canned-bar" id="staff-quick-canned-bar" style="display:none;">
+            <span class="staff-canned-label"><i class="fa-solid fa-bolt"></i> Quick:</span>
+            <button type="button" class="staff-canned-btn" data-reply="Hello! Welcome to Jules Cafe. How can we help you today?">👋 Greeting</button>
+            <button type="button" class="staff-canned-btn" data-reply="We are preparing your order fresh right now at the espresso bar!">☕ Preparing</button>
+            <button type="button" class="staff-canned-btn" data-reply="Your order is freshly prepared and ready for pickup at the counter!">✅ Ready</button>
+            <button type="button" class="staff-canned-btn" data-reply="Yes! We offer Oat Milk (+₱30) and Almond Milk (+₱30) for all coffee and milk drinks.">🥛 Milks</button>
+            <button type="button" class="staff-canned-btn" data-reply="Our Communal Road branch is open daily from 8:00 AM to 10:00 PM.">🕒 Hours</button>
+            <button type="button" class="staff-canned-btn" data-reply="Thank you for ordering with Jules Cafe! Have a wonderful day! ❤️">❤️ Thank you</button>
+          </div>
+
+          <form id="staff-chat-reply-form" class="staff-chat-reply-bar">
+            <input type="text" id="staff-chat-reply-input" placeholder="Type reply as Barista..." required disabled autocomplete="off">
+            <button type="submit" id="staff-chat-send-btn" class="btn-primary" disabled><i class="fa-solid fa-paper-plane"></i> Reply</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS CONTAINER -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

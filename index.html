@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Jules Cafe</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Work+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="chat.css">
+  <link rel="stylesheet" href="auth.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+  <header id="navbar">
+
+    <div class="logo">
+
+      <img src="584927562_696803330152901_2932946184318253535_n.jpg" alt="Jules Cafe">
+
+      <h2>Jules <span>Cafe</span></h2>
+
+    </div>
+
+    <nav>
+
+      <ul class="nav-links">
+
+        <li><a href="#about">About</a></li>
+
+        <li><a href="#menu">Menu</a></li>
+
+        <li><a href="#visit">Visit</a></li>
+
+        <li><a href="#contact">Contact</a></li>
+
+        <li><a href="admin.html" style="color: #d4a373; font-weight: 600;"><i class="fa-solid fa-lock"></i> Staff Portal</a></li>
+
+      </ul>
+
+      <a href="orderonline.html" class="btn order-btn">Order Online</a>
+
+      <div class="hamburger">
+
+        <i class="fa-solid fa-bars"></i>
+
+      </div>
+
+    </nav>
+
+  </header>
+
+  <!-- Mobile Menu -->
+
+  <div class="mobile-menu">
+
+    <a href="#about">About</a>
+
+    <a href="#menu">Menu</a>
+
+    <a href="#visit">Visit</a>
+
+    <a href="#contact">Contact</a>
+
+    <a href="admin.html"><i class="fa-solid fa-user-gear"></i> Staff / Admin Portal</a>
+
+    <a href="orderonline.html" class="btn">Order Online</a>
+
+  </div>
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div class="steam">
+
+      <span></span>
+
+      <span></span>
+
+      <span></span>
+
+    </div>
+
+    <img src="584927562_696803330152901_2932946184318253535_n.jpg" class="hero-logo">
+
+    <h1>
+
+      Slow mornings,
+
+      <span>strong</span> coffee
+
+    </h1>
+
+    <p>
+
+      Freshly brewed coffee, homemade pastries,
+      and a warm place to gather.
+
+    </p>
+
+    <div class="hero-buttons">
+
+      <a href="orderonline.html" class="btn">Order Online</a>
+
+      <a href="orderonline.html?tab=byoc" class="outline-btn" style="border-color: #d4a373; color: #d4a373;"><i
+          class="fa-solid fa-wand-magic-sparkles"></i> Build Your Own Coffee</a>
+
+      <a href="#menu" class="outline-btn">View Menu</a>
+
+      <a href="#visit" class="outline-btn">Find Us</a>
+
+    </div>
+
+  </section>
+
+  <!-- ABOUT -->
+
+  <section id="about" class="about">
+
+    <div class="about-image">
+
+      <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900" alt="Cafe">
+
+    </div>
+
+    <div class="about-text">
+
+      <h2>Our Story</h2>
+
+      <p>
+
+        Jules Cafe is your neighborhood coffee shop built on slow mornings,
+        carefully crafted espresso, and freshly baked treats.
+        Whether you're catching up with friends or enjoying quiet time,
+        our doors are always open.
+
+      </p>
+
+    </div>
+
+  </section>
+
+  <!-- MENU -->
+
+  <section id="menu" class="menu">
+
+    <h2>Our Menu</h2>
+
+    <!-- Landing Menu Search Bar -->
+    <div class="landing-menu-search-wrapper">
+      <div class="landing-search-box">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input 
+          type="text" 
+          id="landing-menu-search" 
+          placeholder="Search our handcrafted drinks & food (e.g. Latte, Matcha, Frappe, Carbonara)..." 
+          autocomplete="off"
+          aria-label="Search menu"
+        >
+        <button type="button" id="landing-search-clear" class="btn-clear-landing-search" style="display: none;" aria-label="Clear Search">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="landing-search-tags">
+        <span class="tags-label"><i class="fa-solid fa-fire text-gold"></i> Popular:</span>
+        <button type="button" class="landing-tag-btn" data-query="Latte">Latte</button>
+        <button type="button" class="landing-tag-btn" data-query="Biscoff">Biscoff</button>
+        <button type="button" class="landing-tag-btn" data-query="Matcha">Matcha</button>
+        <button type="button" class="landing-tag-btn" data-query="Cheesecake">Cheesecake</button>
+        <button type="button" class="landing-tag-btn" data-query="Carbonara">Carbonara</button>
+      </div>
+      <div id="landing-search-feedback" class="landing-search-feedback" style="display: none;"></div>
+    </div>
+
+    <div class="cards">
+
+      <div class="card">
+
+        <i class="fa-solid fa-mug-hot"></i>
+
+        <h3>Espresso-Based</h3>
+
+        <p>Americano .......... ₱95</p>
+
+        <p>Cafe Latte .......... ₱105</p>
+
+        <p>Spanish Latte ....... ₱125</p>
+
+        <p>Biscoff Latte ....... ₱145</p>
+
+      </div>
+
+      <div class="card">
+
+        <i class="fa-solid fa-glass-water"></i>
+
+        <h3>Milk-Based</h3>
+
+        <p>Milo Dinosaur ....... ₱115</p>
+
+        <p>Matcha Latte ........ ₱125</p>
+
+        <p>Nutella Cheesecake .. ₱155</p>
+
+        <p>Pistachio Cheesecake ₱175</p>
+
+      </div>
+
+      <div class="card">
+
+        <i class="fa-solid fa-ice-cream"></i>
+
+        <h3>Frappe</h3>
+
+        <p>Oreo Tiramisu ....... ₱165</p>
+
+        <p>Ube Cheese .......... ₱165</p>
+
+        <p>Mango Graham ........ ₱165</p>
+
+        <p>Dark Mocha .......... ₱175</p>
+
+      </div>
+
+      <div class="card">
+
+        <i class="fa-solid fa-utensils"></i>
+
+        <h3>Quick Bites</h3>
+
+        <p>Special Cassava ..... ₱85</p>
+
+        <p>Ham & Cheese ........ ₱115</p>
+
+        <p>Pinoy Spaghetti ..... ₱125</p>
+
+        <p>Creamy Carbonara .... ₱135</p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- CUSTOMER REVIEWS -->
+  <section id="reviews" class="reviews-section">
+    <div class="section-header">
+      <h2>Loved by Coffee Lovers</h2>
+      <p class="subtitle">See what our regulars and first-timers have to say about Jules Cafe</p>
+      <button id="open-review-modal-btn" class="btn outline-btn" style="margin-top: 15px; border-color: #d4a373; color: #d4a373;">
+        <i class="fa-solid fa-pen-to-square"></i> Leave a Review
+      </button>
+    </div>
+    <div id="reviews-grid" class="reviews-grid">
+      <!-- Dynamically loaded via script.js -->
+    </div>
+  </section>
+
+  <!-- VISIT -->
+
+  <section id="visit" class="visit">
+
+    <div>
+
+      <h2>Hours</h2>
+
+      <p>Mon - Fri : 7AM - 8PM</p>
+
+      <p>Saturday : 8AM - 9PM</p>
+
+      <p>Sunday : 8AM - 6PM</p>
+
+    </div>
+
+    <div>
+
+      <h2>Visit Us</h2>
+
+      <p>PRK-2, Communal Road</p>
+
+      <p>Davao City, Philippines</p>
+
+      <p>+63 912 345 6789</p>
+
+      <p style="margin-top: 10px;">
+        <a href="https://www.google.com/maps/search/?api=1&query=PRK-2+Communal+Road+Davao+City" target="_blank"
+          class="btn"
+          style="padding: 6px 14px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-map-location-dot"></i> View on Google Maps
+        </a>
+      </p>
+
+    </div>
+
+  </section>
+
+  <footer id="contact">
+
+    <img src="584927562_696803330152901_2932946184318253535_n.jpg" alt="Jules Cafe">
+
+    <p>Jules Cafe © 2026</p>
+
+    <div>
+
+      <a href="#about">About</a>
+
+      <a href="#menu">Menu</a>
+
+      <a href="#visit">Visit</a>
+
+      <a href="#contact">Contact</a>
+
+    </div>
+
+  </footer>
+
+  <!-- Leave a Review Modal -->
+  <div id="review-modal" class="lightbox-modal">
+    <div class="lightbox-content review-modal-content">
+      <button class="lightbox-close" id="review-modal-close" aria-label="Close Modal">&times;</button>
+      <div class="modal-header">
+        <i class="fa-solid fa-star text-gold" style="font-size: 2rem;"></i>
+        <h2>Share Your Experience</h2>
+        <p>Tell us what you loved about your Jules Cafe visit!</p>
+      </div>
+      <form id="review-form">
+        <div class="form-group">
+          <label for="review-name">Your Name</label>
+          <input type="text" id="review-name" placeholder="e.g. Maria Santos" required />
+        </div>
+        <div class="form-group">
+          <label>Rating</label>
+          <div class="star-rating-select" id="star-rating-select">
+            <i class="fa-solid fa-star active" data-val="1"></i>
+            <i class="fa-solid fa-star active" data-val="2"></i>
+            <i class="fa-solid fa-star active" data-val="3"></i>
+            <i class="fa-solid fa-star active" data-val="4"></i>
+            <i class="fa-solid fa-star active" data-val="5"></i>
+          </div>
+          <input type="hidden" id="review-rating-input" value="5" />
+        </div>
+        <div class="form-group">
+          <label for="review-favorite">Favorite Drink or Food Item</label>
+          <input type="text" id="review-favorite" placeholder="e.g. Spanish Latte & Creamy Carbonara" />
+        </div>
+        <div class="form-group">
+          <label for="review-comment">Review / Feedback</label>
+          <textarea id="review-comment" rows="4" placeholder="Write your review here..." required></textarea>
+        </div>
+        <button type="submit" class="btn" style="width: 100%; font-size: 1.05rem; margin-top: 10px;">
+          <i class="fa-solid fa-paper-plane"></i> Submit Review
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script src="chat.js"></script>
+  <script src="script.js"></script>
+
+</body>
+
+</html>

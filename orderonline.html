@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Online | Jules Cafe</title>
+  
+  <!-- Google Fonts: Fraunces & Work Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Leaflet Interactive Maps CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- External Stylesheet -->
+  <link rel="stylesheet" href="orderonline.css">
+  <link rel="stylesheet" href="chat.css">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+
+  <!-- Site Header Navigation -->
+  <header class="site-header">
+    <nav class="navbar">
+     <a href="index.html" class="brand-logo">
+    <img src="584927562_696803330152901_2932946184318253535_n.jpg" alt="Jules Cafe Logo">
+    <span>Jules <span class="gold">Cafe</span></span>
+</a>
+
+      <!-- Desktop Links -->
+      <ul class="nav-links">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#menu">Menu</a></li>
+        <li><a href="index.html#visit">Visit</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><button type="button" id="btn-open-tracker" class="btn-nav-tracker"><i class="fa-solid fa-location-crosshairs"></i> Track Order</button></li>
+        <li><a href="admin.html" style="color: #d4a373; font-weight: 600;"><i class="fa-solid fa-lock"></i> Staff Portal</a></li>
+        <li><a href="orderonline.html" class="btn-nav-order active">Order online</a></li>
+      </ul>
+
+      <!-- Mobile Hamburger Button -->
+      <button class="hamburger-btn" id="hamburger-toggle" aria-label="Toggle Navigation Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Mobile Navigation Drawer -->
+  <div class="mobile-drawer" id="mobile-drawer">
+    <button class="drawer-close-btn" id="drawer-close">&times;</button>
+    <ul class="drawer-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#menu">Menu</a></li>
+      <li><a href="index.html#visit">Visit</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+      <li><button type="button" id="btn-open-tracker-mobile" class="btn-nav-tracker-mobile"><i class="fa-solid fa-location-crosshairs"></i> Track Order</button></li>
+      <li><a href="admin.html"><i class="fa-solid fa-user-gear"></i> Staff / Admin Portal</a></li>
+      <li><a href="orderonline.html" class="btn-nav-order active">Order online</a></li>
+    </ul>
+  </div>
+
+  <!-- Hero Banner with Toggle -->
+  <section class="hero-banner">
+    <h1>Order ahead, skip the line</h1>
+    <p>Freshly roasted coffee and artisanal pastries prepared to order.</p>
+
+    <!-- Fulfillment Mode Toggle -->
+    <div class="fulfillment-toggle-wrapper">
+      <div class="toggle-pill">
+        <button class="toggle-btn active" id="toggle-pickup">
+          <i class="fa-solid fa-store"></i> Pickup
+        </button>
+        <button class="toggle-btn" id="toggle-delivery">
+          <i class="fa-solid fa-truck-fast"></i> Delivery
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Layout -->
+  <main class="main-wrapper">
+    <!-- View Switcher Tabs (Separates Products and Cart/Checkout) -->
+    <div class="view-switcher-bar" id="view-switcher-bar">
+      <div class="view-switch-pills">
+        <button type="button" class="view-pill-btn active" id="view-pill-menu" data-target="menu">
+          <i class="fa-solid fa-mug-saucer"></i> 
+          <span>1. Browse Menu Products</span>
+        </button>
+        <button type="button" class="view-pill-btn" id="view-pill-cart" data-target="cart">
+          <i class="fa-solid fa-bag-shopping"></i> 
+          <span>2. My Order &amp; Checkout</span>
+          <span class="view-cart-counter-badge" id="view-cart-counter-badge">0 items</span>
+        </button>
+      </div>
+      <div class="view-layout-toggle-hint">
+        <button type="button" class="btn-toggle-split" id="btn-toggle-split" title="Toggle between Side-by-Side or Dedicated View">
+          <i class="fa-solid fa-table-columns"></i> <span id="split-toggle-text">Separate Views</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="order-grid" id="order-grid-container">
+      
+      <!-- Menu Ordering Column -->
+      <section class="menu-column" id="menu-column-section">
+        
+        <!-- COFFEE OF THE DAY & SPECIAL BUNDLES BANNER -->
+        <div class="specials-banner-card" id="specials-banner-card">
+          <!-- Rendered dynamically by orderonline.js -->
+        </div>
+
+        <!-- Menu Search & Popular Quick Filters -->
+        <div class="menu-search-section">
+          <div class="menu-search-bar-box">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input 
+              type="text" 
+              id="menu-search-input" 
+              class="menu-search-input" 
+              placeholder="Search coffee, frappes, cheesecakes, bites..." 
+              autocomplete="off"
+              aria-label="Search menu items"
+            >
+            <button type="button" id="menu-search-clear" class="btn-clear-search" aria-label="Clear Search" style="display: none;">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          
+          <div class="search-quick-chips">
+            <span class="chips-label"><i class="fa-solid fa-fire text-gold"></i> Popular:</span>
+            <button type="button" class="quick-chip-btn" data-search="Latte">Latte</button>
+            <button type="button" class="quick-chip-btn" data-search="Biscoff">Biscoff</button>
+            <button type="button" class="quick-chip-btn" data-search="Matcha">Matcha</button>
+            <button type="button" class="quick-chip-btn" data-search="Frappe">Frappe</button>
+            <button type="button" class="quick-chip-btn" data-search="Cheesecake">Cheesecake</button>
+            <button type="button" class="quick-chip-btn" data-search="Carbonara">Carbonara</button>
+          </div>
+
+          <div id="search-status-bar" class="search-status-bar" style="display: none;">
+            <span id="search-status-text">Found 0 items</span>
+            <button type="button" id="btn-clear-search-filter" class="btn-reset-search">
+              <i class="fa-solid fa-rotate-left"></i> Clear Search
+            </button>
+          </div>
+        </div>
+
+        <!-- Category Filter Tabs -->
+        <div class="category-tabs">
+          <button class="cat-tab active" data-category="all">All Items</button>
+          <button class="cat-tab cat-tab-byoc" data-category="byoc"><i class="fa-solid fa-wand-magic-sparkles"></i> Build Your Own Coffee</button>
+          <button class="cat-tab" data-category="espresso">Espresso-Based</button>
+          <button class="cat-tab" data-category="milk">Milk-Based</button>
+          <button class="cat-tab" data-category="frappe">Frappe</button>
+          <button class="cat-tab" data-category="quickbites">Quick Bites</button>
+        </div>
+
+        <!-- Build Your Own Coffee Interactive Customizer Container -->
+        <div id="byoc-builder-container" class="byoc-card" style="display: none;">
+          <div class="byoc-header">
+            <h3><i class="fa-solid fa-flask-vial"></i> Custom Coffee Lab</h3>
+            <p>Craft your custom signature coffee from scratch! Choose your base, temperature, milk, syrups, and foam finish — or let our AI Barista design it for you!</p>
+          </div>
+
+          <!-- AI Barista Assistant Card -->
+          <div class="ai-barista-panel">
+            <div class="ai-panel-header">
+              <div class="ai-avatar-icon"><i class="fa-solid fa-robot"></i></div>
+              <div class="ai-panel-title">
+                <h4>AI Barista Coffee Architect</h4>
+                <p>Tell the AI what vibe or flavor you're craving, or pick a mood chip — it will suggest the brew & select all ingredients for you!</p>
+              </div>
+            </div>
+
+            <div class="ai-mood-chips">
+              <span class="mood-label"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Moods:</span>
+              <button type="button" class="ai-chip-btn" onclick="askAiBarista('study')">⚡ Late Night Study</button>
+              <button type="button" class="ai-chip-btn" onclick="askAiBarista('sweet')">🍦 Sweet Creamy Treat</button>
+              <button type="button" class="ai-chip-btn" onclick="askAiBarista('davao')">🌴 Hot Afternoon Chill</button>
+              <button type="button" class="ai-chip-btn" onclick="askAiBarista('strong')">🔥 Bold & Intense</button>
+              <button type="button" class="ai-chip-btn" onclick="askAiBarista('surprise')">🎲 Surprise Me AI</button>
+            </div>
+
+            <div class="ai-prompt-box">
+              <div class="ai-input-wrapper">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <input type="text" id="ai-coffee-prompt" placeholder="e.g. I want an energetic iced coffee with caramel and oat milk...">
+              </div>
+              <button type="button" class="btn-ai-generate" id="btn-ai-generate" onclick="submitAiPrompt()">
+                <i class="fa-solid fa-brain"></i> Ask AI Barista
+              </button>
+            </div>
+
+            <div id="ai-rationale-box" class="ai-rationale-box hidden">
+              <div class="ai-rationale-header">
+                <i class="fa-solid fa-circle-check"></i> <strong id="ai-recipe-title">AI Signature Recipe Generated!</strong>
+              </div>
+              <p id="ai-recipe-reason" class="ai-reason-text">AI rationale explanation...</p>
+            </div>
+          </div>
+
+          <div class="byoc-layout">
+            <!-- Left Controls Column -->
+            <div class="byoc-controls">
+              
+              <div class="byoc-group">
+                <label for="byoc-name">1. Name Your Custom Brew</label>
+                <input type="text" id="byoc-name" value="My Signature Brew" placeholder="e.g. Jared's Vanilla Oat Latte">
+              </div>
+
+              <div class="byoc-group">
+                <label>2. Choose Coffee Base</label>
+                <div class="byoc-options-grid" id="byoc-base-options">
+                  <button type="button" class="byoc-btn active" data-type="base" data-val="Single Espresso" data-price="95">Single Shot (₱95)</button>
+                  <button type="button" class="byoc-btn" data-type="base" data-val="Double Espresso" data-price="115">Double Shot (₱115)</button>
+                  <button type="button" class="byoc-btn" data-type="base" data-val="Decaf Shot" data-price="100">Decaf Shot (₱100)</button>
+                </div>
+              </div>
+
+              <div class="byoc-group">
+                <label>3. Prep Style & Temp</label>
+                <div class="byoc-options-grid" id="byoc-temp-options">
+                  <button type="button" class="byoc-btn active" data-type="temp" data-val="Hot Steamed" data-price="0">Hot Steamed ☕</button>
+                  <button type="button" class="byoc-btn" data-type="temp" data-val="Over Ice" data-price="0">Over Ice 🧊</button>
+                  <button type="button" class="byoc-btn" data-type="temp" data-val="Blended Frappe" data-price="20">Blended Frappe 🍧 (+₱20)</button>
+                </div>
+              </div>
+
+              <div class="byoc-group">
+                <label>4. Cup Size</label>
+                <div class="byoc-options-grid" id="byoc-size-options">
+                  <button type="button" class="byoc-btn" data-type="size" data-val="8oz Regular" data-price="0">8oz Regular</button>
+                  <button type="button" class="byoc-btn active" data-type="size" data-val="12oz Medium" data-price="20">12oz Medium (+₱20)</button>
+                  <button type="button" class="byoc-btn" data-type="size" data-val="16oz Large" data-price="40">16oz Large (+₱40)</button>
+                </div>
+              </div>
+
+              <div class="byoc-group">
+                <label>5. Milk & Cream Choice</label>
+                <div class="byoc-options-grid" id="byoc-milk-options">
+                  <button type="button" class="byoc-btn active" data-type="milk" data-val="Whole Milk" data-price="0">Whole Milk</button>
+                  <button type="button" class="byoc-btn" data-type="milk" data-val="Oat Milk" data-price="25">Oat Milk (+₱25)</button>
+                  <button type="button" class="byoc-btn" data-type="milk" data-val="Almond Milk" data-price="25">Almond Milk (+₱25)</button>
+                  <button type="button" class="byoc-btn" data-type="milk" data-val="Black / No Milk" data-price="0">No Milk / Black</button>
+                </div>
+              </div>
+
+              <div class="byoc-group">
+                <label>6. Flavor Syrup Add-on</label>
+                <div class="byoc-options-grid" id="byoc-syrup-options">
+                  <button type="button" class="byoc-btn active" data-type="syrup" data-val="No Syrup" data-price="0">None</button>
+                  <button type="button" class="byoc-btn" data-type="syrup" data-val="Vanilla Syrup" data-price="20">Vanilla (+₱20)</button>
+                  <button type="button" class="byoc-btn" data-type="syrup" data-val="Caramel Syrup" data-price="20">Caramel (+₱20)</button>
+                  <button type="button" class="byoc-btn" data-type="syrup" data-val="Hazelnut Syrup" data-price="20">Hazelnut (+₱20)</button>
+                  <button type="button" class="byoc-btn" data-type="syrup" data-val="Lotus Biscoff Syrup" data-price="25">Lotus Biscoff (+₱25)</button>
+                  <button type="button" class="byoc-btn" data-type="syrup" data-val="Dark Mocha Sauce" data-price="20">Dark Mocha (+₱20)</button>
+                </div>
+              </div>
+
+              <div class="byoc-group">
+                <label>7. Cream Foam & Topping Finish</label>
+                <div class="byoc-options-grid" id="byoc-topping-options">
+                  <button type="button" class="byoc-btn active" data-type="topping" data-val="No Topping" data-price="0">None</button>
+                  <button type="button" class="byoc-btn" data-type="topping" data-val="Salted Cream Cheese Foam" data-price="30">Salted Cream Cheese Foam (+₱30)</button>
+                  <button type="button" class="byoc-btn" data-type="topping" data-val="Caramel Drizzle" data-price="15">Caramel Drizzle (+₱15)</button>
+                  <button type="button" class="byoc-btn" data-type="topping" data-val="Milo Powder Crown" data-price="15">Milo Powder (+₱15)</button>
+                  <button type="button" class="byoc-btn" data-type="topping" data-val="Cookie Crumbs" data-price="15">Cookie Crumbles (+₱15)</button>
+                  <button type="button" class="byoc-btn" data-type="topping" data-val="Whipped Cream" data-price="20">Whipped Cream (+₱20)</button>
+                </div>
+              </div>
+
+              <div class="byoc-group checkbox-boost">
+                <label><input type="checkbox" id="byoc-extra-shot"> <i class="fa-solid fa-bolt"></i> Add Extra Espresso Shot (+₱30)</label>
+              </div>
+
+            </div>
+
+            <!-- Right Visual Preview & Checkout Box -->
+            <div class="byoc-preview-box">
+              <div class="virtual-cup-graphic" id="virtual-cup">
+                <div class="cup-foam-layer" id="cup-foam"></div>
+                <div class="cup-liquid-layer" id="cup-liquid"></div>
+                <div class="cup-ice" id="cup-ice"><i class="fa-solid fa-snowflake"></i> Over Ice</div>
+                <div class="cup-steam" id="cup-steam"><span></span><span></span><span></span></div>
+                <div class="cup-label" id="cup-name-label">My Signature Brew</div>
+              </div>
+
+              <div class="byoc-summary-card">
+                <h4>Recipe Summary</h4>
+                <ul class="byoc-summary-list" id="byoc-summary-list">
+                  <!-- Dynamically populated summary items -->
+                </ul>
+                <div class="byoc-price-total">
+                  <span>Custom Coffee Total:</span>
+                  <span id="byoc-total-price">₱115.00</span>
+                </div>
+                <button type="button" class="btn-byoc-add" id="byoc-add-cart-btn">
+                  <i class="fa-solid fa-cart-plus"></i> Add Custom Coffee to Order
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="menu-items-container">
+          <!-- Dynamically populated menu cards -->
+        </div>
+
+      </section>
+
+      <!-- Sticky Cart Sidebar Column -->
+      <aside class="cart-column" id="cart-column-aside">
+        <div class="cart-card">
+          
+          <div class="cart-header">
+            <h3><i class="fa-solid fa-bag-shopping"></i> Your Order</h3>
+            <div class="cart-header-right">
+              <span class="cart-count-badge" id="cart-count-badge">0 items</span>
+              <button type="button" class="btn-cart-back-menu" id="btn-cart-back-menu" title="Back to Menu Products">
+                <i class="fa-solid fa-mug-saucer"></i> Menu
+              </button>
+            </div>
+          </div>
+
+          <!-- Active Fulfillment Notice -->
+          <div class="fulfillment-badge-bar" id="fulfillment-badge-bar">
+            <span>Mode: <strong id="current-fulfillment-text">Pickup at Cafe</strong></span>
+            <button type="button" class="switch-mode-link" id="switch-mode-btn">Change</button>
+          </div>
+
+          <!-- Cart Line Items -->
+          <div id="cart-content-panel">
+            <ul class="cart-items-list" id="cart-items-list">
+              <!-- Dynamically populated cart items -->
+            </ul>
+
+            <!-- Empty Cart State -->
+            <div class="cart-empty-state" id="cart-empty-state">
+              <i class="fa-solid fa-mug-hot"></i>
+              <p>Your cart is empty.</p>
+              <span>Add items from the menu to start your order.</span>
+            </div>
+
+            <!-- Automated Smart Recommendations Container -->
+            <div id="cart-recommendations-container"></div>
+
+            <!-- Cost Calculations -->
+            <div class="cart-summary" id="cart-summary">
+              <div class="summary-row">
+                <span>Subtotal</span>
+                <span id="subtotal-val">₱0.00</span>
+              </div>
+              <div class="summary-row" id="delivery-fee-row" style="display: none;">
+                <span>Delivery Fee</span>
+                <span id="delivery-fee-val">₱49.00</span>
+              </div>
+              <div class="summary-row">
+                <span>Estimated Tax (12% VAT)</span>
+                <span id="tax-val">₱0.00</span>
+              </div>
+              <div class="summary-row total-row">
+                <span>Total</span>
+                <span id="total-val">₱0.00</span>
+              </div>
+            </div>
+
+            <!-- Auth Gate Reminder for Checkout -->
+            <div id="cart-auth-gate-box" class="cart-auth-gate-box hidden">
+              <div class="cart-auth-gate-left">
+                <i class="fa-solid fa-mug-hot text-gold"></i>
+                <div>
+                  <strong>Order as Guest or Member</strong>
+                  <span>Sign in to earn rewards, or proceed directly to checkout as guest!</span>
+                </div>
+              </div>
+              <button type="button" class="btn-auth-gate-login" onclick="window.JulesAuth.openLogin();">
+                <i class="fa-solid fa-right-to-bracket"></i> Sign In / Register
+              </button>
+            </div>
+
+            <!-- Checkout Action Button -->
+            <button class="btn-checkout" id="checkout-btn" disabled>
+              Checkout <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <!-- Inline Checkout Form Panel (Hidden by default) -->
+          <div class="checkout-form-panel hidden" id="checkout-form-panel">
+            <div class="checkout-header">
+              <h4>Complete Your Details</h4>
+              <button class="back-to-cart-btn" id="back-to-cart-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <form id="inline-checkout-form">
+              <div class="form-group">
+                <label for="cust-name">Full Name *</label>
+                <input type="text" id="cust-name" required placeholder="Jules Smith" class="form-control">
+              </div>
+
+              <div class="form-group">
+                <label for="cust-phone">Phone Number (11 digits) *</label>
+                <input type="tel" id="cust-phone" required placeholder="e.g., 09123456789" class="form-control" maxlength="11" inputmode="numeric" pattern="[0-9]{11}">
+              </div>
+
+
+
+              <!-- Pickup vs Delivery Field -->
+              <div class="form-group" id="fulfillment-field-group">
+                <label id="fulfillment-input-label" for="cust-fulfillment-info">Pickup Time *</label>
+                <input type="text" id="cust-fulfillment-info" placeholder="e.g., ASAP (approx 15 mins)" class="form-control">
+              </div>
+
+              <!-- Interactive Delivery Location Picker (Shown when Delivery Mode Selected) -->
+              <div class="delivery-map-section hidden" id="delivery-map-section">
+                <div class="delivery-map-header">
+                  <label class="delivery-map-label"><i class="fa-solid fa-map-location-dot"></i> Pin Delivery Location</label>
+                  <span class="delivery-distance-badge" id="delivery-dist-badge"><i class="fa-solid fa-motorcycle"></i> Calculating...</span>
+                </div>
+                
+                <div class="map-search-bar">
+                  <div class="map-search-input-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="delivery-address-search" placeholder="Search street, barangay, or landmark in Davao...">
+                  </div>
+                  <button type="button" id="btn-search-address" class="btn-map-action" title="Search Location"><i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+
+                <div class="map-quick-buttons">
+                  <button type="button" class="btn-locate-gps" id="btn-locate-gps">
+                    <i class="fa-solid fa-crosshairs"></i> Use GPS Location
+                  </button>
+                  <button type="button" class="btn-locate-preset" data-preset="communal">📍 Communal</button>
+                  <button type="button" class="btn-locate-preset" data-preset="buhangin">📍 Buhangin</button>
+                  <button type="button" class="btn-locate-preset" data-preset="lanang">📍 Lanang</button>
+                </div>
+
+                <!-- Leaflet Interactive Map Container -->
+                <div id="delivery-leaflet-map" class="delivery-map-canvas"></div>
+
+                <!-- Pinned Location Info Card -->
+                <div class="delivery-location-info-card">
+                  <div class="loc-detail-row">
+                    <i class="fa-solid fa-location-dot loc-icon"></i>
+                    <div class="loc-text-wrap">
+                      <span class="loc-title">Pinned Delivery Spot:</span>
+                      <span class="loc-address-display" id="loc-address-display">PRK-2, Communal Road, Davao City</span>
+                      <span class="loc-coords-display" id="loc-coords-display">Lat: 7.1420, Lng: 125.6265</span>
+                    </div>
+                  </div>
+                  <div class="loc-eta-row">
+                    <span><i class="fa-solid fa-clock"></i> Est. Delivery: <strong id="delivery-eta-text">20–30 mins</strong></span>
+                    <a id="preview-gmaps-link" href="https://www.google.com/maps?q=7.1420,125.6265" target="_blank" class="preview-gmaps-btn" title="Preview on Google Maps">
+                      <i class="fa-solid fa-arrow-up-right-from-square"></i> Google Maps
+                    </a>
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 10px;">
+                  <label for="delivery-notes"><i class="fa-solid fa-pen-to-square"></i> Landmark / House # / Instructions</label>
+                  <input type="text" id="delivery-notes" placeholder="e.g., Gate 2, near Barangay Hall, call when outside" class="form-control">
+                </div>
+
+                <!-- Hidden inputs for order submission -->
+                <input type="hidden" id="delivery-lat-val" value="7.1420">
+                <input type="hidden" id="delivery-lng-val" value="125.6265">
+                <input type="hidden" id="delivery-gmaps-url-val" value="https://www.google.com/maps/dir/?api=1&origin=7.1420,125.6265&destination=7.1420,125.6265">
+              </div>
+
+              <!-- Payment Method Selection -->
+              <div class="payment-method-section" id="payment-method-section">
+                <label class="payment-section-label">
+                  <i class="fa-solid fa-wallet"></i> Payment Method *
+                </label>
+                
+                <div class="payment-options-grid">
+                  <label class="payment-option-card active" id="pay-card-cash">
+                    <input type="radio" name="checkout_payment_mode" value="Cash" checked>
+                    <div class="pay-option-content">
+                      <div class="pay-option-icon cash-icon"><i class="fa-solid fa-money-bill-wave"></i></div>
+                      <div class="pay-option-info">
+                        <span class="pay-option-title" id="cash-option-title">Cash on Pickup</span>
+                        <span class="pay-option-sub" id="cash-option-sub">Pay in cash when ready</span>
+                      </div>
+                    </div>
+                  </label>
+
+                  <label class="payment-option-card" id="pay-card-gcash">
+                    <input type="radio" name="checkout_payment_mode" value="GCash">
+                    <div class="pay-option-content">
+                      <div class="pay-option-icon gcash-icon">
+                        <span class="gcash-letter-badge">G</span>
+                      </div>
+                      <div class="pay-option-info">
+                        <span class="pay-option-title">GCash Express</span>
+                        <span class="pay-option-sub">Scan QR &amp; Enter Ref No.</span>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+
+                <!-- GCash Payment Panel (Interactive, displayed when GCash is active) -->
+                <div class="gcash-payment-box hidden" id="gcash-payment-box">
+                  <div class="gcash-box-header">
+                    <div class="gcash-brand-title">
+                      <span class="gcash-logo-text"><i class="fa-solid fa-mobile-screen-button"></i> GCash</span>
+                      <span class="gcash-official-tag"><i class="fa-solid fa-circle-check"></i> Verified Merchant</span>
+                    </div>
+                    <div class="gcash-box-due">
+                      <span class="due-lbl">Total to Send:</span>
+                      <span class="due-val" id="gcash-due-total">₱0.00</span>
+                    </div>
+                  </div>
+
+                  <!-- QR Code and Account Info Card -->
+                  <div class="gcash-qr-card">
+                    <div class="gcash-qr-img-wrapper" id="btn-zoom-qr" title="Click to enlarge QR Code" style="cursor: pointer;">
+                      <img src="gcash_qr.png" alt="Jules Cafe GCash QR Code" class="gcash-qr-img" id="gcash-qr-preview-img">
+                      <div class="qr-zoom-tag"><i class="fa-solid fa-magnifying-glass-plus"></i> Tap to zoom</div>
+                    </div>
+
+                    <div class="gcash-acc-details">
+                      <div class="gcash-acc-row">
+                        <span class="acc-label">Account Name:</span>
+                        <strong class="acc-val">Jules Cafe Davao</strong>
+                      </div>
+                      <div class="gcash-acc-row">
+                        <span class="acc-label">GCash Mobile Number:</span>
+                        <div class="copy-num-group">
+                          <strong class="acc-val phone" id="gcash-phone-text">0908 278 9023</strong>
+                          <button type="button" class="btn-copy-number" id="btn-copy-gcash-num" title="Copy Number">
+                            <i class="fa-regular fa-copy"></i> <span id="copy-btn-label">Copy</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Quick Steps Instructions -->
+                  <div class="gcash-guide-steps">
+                    <div class="guide-step">
+                      <span class="step-num">1</span>
+                      <span class="step-text">Scan QR above or send payment to <strong>0908 278 9023</strong> via GCash.</span>
+                    </div>
+                    <div class="guide-step">
+                      <span class="step-num">2</span>
+                      <span class="step-text">Get your 13-digit <strong>Reference Number</strong> from the GCash SMS/receipt.</span>
+                    </div>
+                    <div class="guide-step">
+                      <span class="step-num">3</span>
+                      <span class="step-text">Paste the Reference Number below to submit your order.</span>
+                    </div>
+                  </div>
+
+                  <!-- Reference Number Input Field -->
+                  <div class="form-group gcash-ref-group">
+                    <label for="cust-gcash-ref">
+                      <i class="fa-solid fa-receipt"></i> GCash Reference Number (13 digits) *
+                    </label>
+                    <input type="text" id="cust-gcash-ref" class="form-control gcash-ref-input" placeholder="e.g., 1002938419283 (13 digits)" maxlength="13" inputmode="numeric" pattern="[0-9]{13}">
+                    <small class="field-help-text"><i class="fa-solid fa-shield-halved"></i> Store barista verifies this against cafe GCash incoming alert.</small>
+                  </div>
+
+                  <!-- Optional Receipt Screenshot Upload -->
+                  <div class="form-group gcash-receipt-group">
+                    <label for="cust-gcash-receipt" class="receipt-file-label">
+                      <i class="fa-solid fa-paperclip"></i> Upload Receipt Screenshot (Optional)
+                    </label>
+                    <input type="file" id="cust-gcash-receipt" accept="image/*" class="receipt-file-input">
+                    <div class="receipt-preview-box hidden" id="receipt-preview-box">
+                      <img id="receipt-preview-thumb" alt="GCash Receipt Preview">
+                      <button type="button" class="btn-clear-receipt" id="btn-clear-receipt" title="Remove">&times;</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="btn-pay-now" id="pay-now-btn">
+                <i class="fa-solid fa-lock"></i> Place Order
+              </button>
+            </form>
+          </div>
+
+          <!-- Order Confirmation Screen (Hidden by default) -->
+          <div class="order-confirmed-screen hidden" id="order-confirmed-screen">
+            <div class="confirm-icon"><i class="fa-solid fa-circle-check"></i></div>
+            <h3>Order Confirmed!</h3>
+            <p>Thank you, <strong id="confirm-name">Customer</strong>.</p>
+            <p class="order-ref">Order #JULES-<span id="confirm-ref">9842</span></p>
+
+            <!-- Payment Confirmation Badge -->
+            <div class="confirm-payment-banner" id="confirm-payment-banner">
+              <i class="fa-solid fa-wallet"></i>
+              <div>
+                <strong>Payment Method:</strong>
+                <p id="confirm-payment-summary">Cash on Pickup</p>
+              </div>
+            </div>
+
+            <div id="confirm-delivery-details" class="confirm-delivery-details hidden">
+              <div class="confirm-address-box">
+                <i class="fa-solid fa-truck-fast"></i>
+                <div>
+                  <strong>Delivery Destination:</strong>
+                  <p id="confirm-delivery-addr">Davao City</p>
+                  <a id="confirm-gmaps-link" href="#" target="_blank" class="confirm-map-link">
+                    <i class="fa-solid fa-map-location-dot"></i> View Delivery Route in Google Maps
+                  </a>
+                </div>
+              </div>
+            </div>
+            <p id="confirm-instructions">We'll have your order ready for pickup in 15–20 minutes.</p>
+            <button class="btn-new-order" id="btn-new-order">Start New Order</button>
+          </div>
+
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- Floating Bottom Order Bar (Instant shortcut to see and manage order) -->
+  <div class="floating-order-bar" id="floating-order-bar" style="display: none;">
+    <div class="floating-order-inner">
+      <div class="floating-order-left">
+        <span class="floating-cart-icon"><i class="fa-solid fa-bag-shopping"></i></span>
+        <div class="floating-order-meta">
+          <span class="floating-item-count" id="floating-item-count">0 items</span>
+          <strong class="floating-total-price" id="floating-total-price">₱0.00</strong>
+        </div>
+      </div>
+      <button type="button" class="btn-floating-view-order" id="btn-floating-view-order">
+        <span>View Order &amp; Details</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- QR Zoom Modal -->
+  <div class="qr-modal-overlay hidden" id="qr-zoom-modal">
+    <div class="qr-modal-backdrop" id="qr-modal-backdrop"></div>
+    <div class="qr-modal-card">
+      <button type="button" class="btn-close-qr-modal" id="btn-close-qr-modal" aria-label="Close">&times;</button>
+      <div class="qr-modal-header">
+        <div class="gcash-modal-badge">
+          <i class="fa-solid fa-mobile-screen"></i> GCash Express / InstaPay
+        </div>
+        <h4>Jules Cafe Official QR Code</h4>
+        <p>Scan directly with your GCash or Banking App</p>
+      </div>
+      <div class="qr-modal-img-box">
+        <img src="gcash_qr.png" alt="Jules Cafe GCash QR Code Large" class="qr-modal-large-img">
+      </div>
+      <div class="qr-modal-footer">
+        <div class="qr-modal-phone-num">0908 278 9023</div>
+        <div class="qr-modal-account-name">Account Name: <strong>Jules Cafe Davao</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Order Tracker Modal -->
+  <div class="qr-modal-overlay hidden" id="order-tracker-modal">
+    <div class="qr-modal-backdrop" id="tracker-modal-backdrop"></div>
+    <div class="qr-modal-card tracker-modal-card">
+      <button type="button" class="btn-close-qr-modal" id="btn-close-tracker-modal" aria-label="Close">&times;</button>
+      <div class="tracker-modal-header">
+        <div class="tracker-live-badge"><span class="pulse-dot"></span> LIVE ORDER TRACKER</div>
+        <h3>Track Your Order</h3>
+        <p>Enter your Order ID below to view live preparation &amp; delivery updates</p>
+      </div>
+
+      <div class="tracker-search-box">
+        <input type="number" id="tracker-id-input" placeholder="Enter Order ID (e.g. 1, 2, 3...)" autocomplete="off" />
+        <button type="button" id="tracker-search-btn" class="btn-action">
+          <i class="fa-solid fa-magnifying-glass"></i> Track
+        </button>
+      </div>
+
+      <div id="tracker-result-container" class="tracker-result-container" style="display: none;">
+        <!-- Dynamically rendered via orderonline.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div class="toast" id="toast-message">
+    <i class="fa-solid fa-circle-info"></i>
+    <span id="toast-text">Item added to cart</span>
+  </div>
+
+  <!-- Simplified Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="logo-badge sm">J</div>
+        <span class="logo-text">Jules Cafe</span>
+      </div>
+      <span>&copy; 2026 Jules Cafe. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <!-- External JavaScript -->
+  <script src="auth.js"></script>
+  <script src="chat.js"></script>
+  <script src="orderonline.js"></script>
+</body>
+</html>

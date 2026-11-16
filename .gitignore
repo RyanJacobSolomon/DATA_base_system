@@ -1,0 +1,7 @@
+*.pyc
+__pycache__/
+.env
+mongodb_bin/
+mongo_data/db/
+mongo_data/mongod.log
+mongo_data/*.tmp

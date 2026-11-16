@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="gcash-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0066f5"/>
+      <stop offset="100%" stop-color="#004bc7"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Background Card -->
+  <rect width="400" height="480" rx="20" fill="#ffffff" filter="url(#shadow)"/>
+
+  <!-- Header Banner -->
+  <path d="M 0 20 Q 0 0 20 0 L 380 0 Q 400 0 400 20 L 400 70 L 0 70 Z" fill="url(#gcash-blue)"/>
+  
+  <text x="200" y="44" fill="#ffffff" font-family="'Segoe UI', Roboto, Helvetica, sans-serif" font-weight="800" font-size="22" text-anchor="middle" letter-spacing="1">
+    GCash
+  </text>
+  <text x="200" y="60" fill="rgba(255,255,255,0.85)" font-family="'Segoe UI', Roboto, Helvetica, sans-serif" font-weight="600" font-size="11" text-anchor="middle" letter-spacing="2">
+    SCAN TO PAY • QR PH
+  </text>
+
+  <!-- QR Frame Outer Box -->
+  <rect x="55" y="90" width="290" height="290" rx="14" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+
+  <!-- Stylized Authentic QR Patterns -->
+  <g fill="#0f172a">
+    <!-- Top-Left Finder Pattern -->
+    <rect x="75" y="110" width="60" height="60" rx="8" fill="#0056b3"/>
+    <rect x="85" y="120" width="40" height="40" rx="4" fill="#ffffff"/>
+    <rect x="93" y="128" width="24" height="24" rx="3" fill="#0056b3"/>
+
+    <!-- Top-Right Finder Pattern -->
+    <rect x="265" y="110" width="60" height="60" rx="8" fill="#0056b3"/>
+    <rect x="275" y="120" width="40" height="40" rx="4" fill="#ffffff"/>
+    <rect x="283" y="128" width="24" height="24" rx="3" fill="#0056b3"/>
+
+    <!-- Bottom-Left Finder Pattern -->
+    <rect x="75" y="300" width="60" height="60" rx="8" fill="#0056b3"/>
+    <rect x="85" y="310" width="40" height="40" rx="4" fill="#ffffff"/>
+    <rect x="93" y="318" width="24" height="24" rx="3" fill="#0056b3"/>
+
+    <!-- Timing Patterns & Data Bits Matrix -->
+    <!-- Horizontal & Vertical Timing -->
+    <rect x="145" y="136" width="10" height="8" rx="1"/>
+    <rect x="165" y="136" width="10" height="8" rx="1"/>
+    <rect x="185" y="136" width="10" height="8" rx="1"/>
+    <rect x="205" y="136" width="10" height="8" rx="1"/>
+    <rect x="225" y="136" width="10" height="8" rx="1"/>
+    <rect x="245" y="136" width="10" height="8" rx="1"/>
+
+    <rect x="101" y="180" width="8" height="10" rx="1"/>
+    <rect x="101" y="200" width="8" height="10" rx="1"/>
+    <rect x="101" y="220" width="8" height="10" rx="1"/>
+    <rect x="101" y="240" width="8" height="10" rx="1"/>
+    <rect x="101" y="260" width="8" height="10" rx="1"/>
+    <rect x="101" y="280" width="8" height="10" rx="1"/>
+
+    <!-- Random Matrix Blocks for High-Fidelity Look -->
+    <rect x="145" y="110" width="24" height="16" rx="2"/>
+    <rect x="180" y="110" width="16" height="16" rx="2"/>
+    <rect x="210" y="110" width="30" height="12" rx="2"/>
+    <rect x="150" y="155" width="35" height="12" rx="2"/>
+    <rect x="200" y="155" width="20" height="15" rx="2"/>
+    <rect x="235" y="155" width="20" height="15" rx="2"/>
+
+    <rect x="75" y="180" width="16" height="24" rx="2"/>
+    <rect x="120" y="180" width="20" height="14" rx="2"/>
+    <rect x="150" y="180" width="15" height="25" rx="2"/>
+    <rect x="235" y="180" width="25" height="18" rx="2"/>
+    <rect x="270" y="180" width="18" height="18" rx="2"/>
+    <rect x="300" y="180" width="25" height="12" rx="2"/>
+
+    <rect x="75" y="215" width="18" height="18" rx="2"/>
+    <rect x="125" y="215" width="15" height="20" rx="2"/>
+    <rect x="260" y="210" width="24" height="20" rx="2"/>
+    <rect x="295" y="210" width="30" height="16" rx="2"/>
+
+    <rect x="75" y="245" width="20" height="16" rx="2"/>
+    <rect x="120" y="245" width="20" height="20" rx="2"/>
+    <rect x="245" y="240" width="20" height="22" rx="2"/>
+    <rect x="280" y="240" width="18" height="15" rx="2"/>
+    <rect x="305" y="240" width="20" height="25" rx="2"/>
+
+    <rect x="75" y="275" width="16" height="15" rx="2"/>
+    <rect x="120" y="275" width="22" height="15" rx="2"/>
+    <rect x="150" y="275" width="24" height="18" rx="2"/>
+    <rect x="245" y="270" width="22" height="16" rx="2"/>
+    <rect x="285" y="270" width="15" height="20" rx="2"/>
+
+    <!-- Bottom Right Quadrant -->
+    <rect x="145" y="305" width="25" height="20" rx="2"/>
+    <rect x="180" y="305" width="20" height="15" rx="2"/>
+    <rect x="210" y="305" width="30" height="15" rx="2"/>
+    <rect x="250" y="305" width="22" height="20" rx="2"/>
+    <rect x="285" y="305" width="40" height="14" rx="2"/>
+
+    <rect x="145" y="335" width="18" height="25" rx="2"/>
+    <rect x="175" y="335" width="28" height="14" rx="2"/>
+    <rect x="215" y="335" width="20" height="25" rx="2"/>
+    <rect x="245" y="335" width="25" height="18" rx="2"/>
+    <rect x="280" y="335" width="20" height="25" rx="2"/>
+    <rect x="310" y="335" width="15" height="20" rx="2"/>
+
+    <rect x="170" y="355" width="35" height="15" rx="2"/>
+    <rect x="245" y="360" width="35" height="10" rx="2"/>
+  </g>
+
+  <!-- Center GCash Logo Badge -->
+  <circle cx="200" cy="235" r="28" fill="#ffffff" stroke="#0066f5" stroke-width="3"/>
+  <circle cx="200" cy="235" r="23" fill="#0066f5"/>
+  <text x="200" y="244" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="24" text-anchor="middle">
+    G
+  </text>
+
+  <!-- Footer Merchant Identification -->
+  <text x="200" y="408" fill="#1e293b" font-family="'Segoe UI', Roboto, Helvetica, sans-serif" font-weight="700" font-size="16" text-anchor="middle">
+    Jules Cafe • Davao City
+  </text>
+  <text x="200" y="428" fill="#0066f5" font-family="'Segoe UI', Roboto, Helvetica, sans-serif" font-weight="700" font-size="14" text-anchor="middle" letter-spacing="1">
+    0908 278 9023
+  </text>
+  <text x="200" y="448" fill="#64748b" font-family="'Segoe UI', Roboto, Helvetica, sans-serif" font-weight="500" font-size="11" text-anchor="middle">
+    (Replace with your personal or merchant GCash QR)
+  </text>
+</svg>
